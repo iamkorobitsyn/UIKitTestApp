@@ -12,6 +12,9 @@
 		65F492712C1088FC00F4BCE2 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65F492702C1088FC00F4BCE2 /* ViewController.swift */; };
 		65F492772C1088FC00F4BCE2 /* UIKitTestApp.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 65F492752C1088FC00F4BCE2 /* UIKitTestApp.xcdatamodeld */; };
 		65F492792C1088FD00F4BCE2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 65F492782C1088FD00F4BCE2 /* Assets.xcassets */; };
+		65F492A02C11E1F700F4BCE2 /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65F4929F2C11E1F700F4BCE2 /* Models.swift */; };
+		65F492A22C11E34800F4BCE2 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65F492A12C11E34800F4BCE2 /* NetworkManager.swift */; };
+		65F492A42C1256BA00F4BCE2 /* APIEndpoints.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65F492A32C1256BA00F4BCE2 /* APIEndpoints.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -22,6 +25,9 @@
 		65F492762C1088FC00F4BCE2 /* UIKitTestApp.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = UIKitTestApp.xcdatamodel; sourceTree = "<group>"; };
 		65F492782C1088FD00F4BCE2 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		65F4927D2C1088FD00F4BCE2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		65F4929F2C11E1F700F4BCE2 /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
+		65F492A12C11E34800F4BCE2 /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
+		65F492A32C1256BA00F4BCE2 /* APIEndpoints.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIEndpoints.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -57,6 +63,9 @@
 				65F4926C2C1088FC00F4BCE2 /* AppDelegate.swift */,
 				65F4926E2C1088FC00F4BCE2 /* SceneDelegate.swift */,
 				65F492702C1088FC00F4BCE2 /* ViewController.swift */,
+				65F4929F2C11E1F700F4BCE2 /* Models.swift */,
+				65F492A12C11E34800F4BCE2 /* NetworkManager.swift */,
+				65F492A32C1256BA00F4BCE2 /* APIEndpoints.swift */,
 				65F492782C1088FD00F4BCE2 /* Assets.xcassets */,
 				65F4927D2C1088FD00F4BCE2 /* Info.plist */,
 				65F492752C1088FC00F4BCE2 /* UIKitTestApp.xcdatamodeld */,
@@ -133,10 +142,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				65F492A22C11E34800F4BCE2 /* NetworkManager.swift in Sources */,
+				65F492A42C1256BA00F4BCE2 /* APIEndpoints.swift in Sources */,
 				65F492772C1088FC00F4BCE2 /* UIKitTestApp.xcdatamodeld in Sources */,
 				65F492712C1088FC00F4BCE2 /* ViewController.swift in Sources */,
 				65F4926D2C1088FC00F4BCE2 /* AppDelegate.swift in Sources */,
 				65F4926F2C1088FC00F4BCE2 /* SceneDelegate.swift in Sources */,
+				65F492A02C11E1F700F4BCE2 /* Models.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
