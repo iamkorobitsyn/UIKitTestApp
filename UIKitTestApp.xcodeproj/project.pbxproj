@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6558F1072C164316003055C2 /* UITableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6558F1062C164316003055C2 /* UITableViewCell.swift */; };
 		65F4926D2C1088FC00F4BCE2 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65F4926C2C1088FC00F4BCE2 /* AppDelegate.swift */; };
 		65F4926F2C1088FC00F4BCE2 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65F4926E2C1088FC00F4BCE2 /* SceneDelegate.swift */; };
 		65F492712C1088FC00F4BCE2 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65F492702C1088FC00F4BCE2 /* ViewController.swift */; };
@@ -18,6 +19,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		6558F1062C164316003055C2 /* UITableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITableViewCell.swift; sourceTree = "<group>"; };
 		65F492692C1088FC00F4BCE2 /* UIKitTestApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = UIKitTestApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		65F4926C2C1088FC00F4BCE2 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		65F4926E2C1088FC00F4BCE2 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -63,6 +65,7 @@
 				65F4926C2C1088FC00F4BCE2 /* AppDelegate.swift */,
 				65F4926E2C1088FC00F4BCE2 /* SceneDelegate.swift */,
 				65F492702C1088FC00F4BCE2 /* ViewController.swift */,
+				6558F1062C164316003055C2 /* UITableViewCell.swift */,
 				65F4929F2C11E1F700F4BCE2 /* Models.swift */,
 				65F492A12C11E34800F4BCE2 /* NetworkManager.swift */,
 				65F492A32C1256BA00F4BCE2 /* APIEndpoints.swift */,
@@ -143,6 +146,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				65F492A22C11E34800F4BCE2 /* NetworkManager.swift in Sources */,
+				6558F1072C164316003055C2 /* UITableViewCell.swift in Sources */,
 				65F492A42C1256BA00F4BCE2 /* APIEndpoints.swift in Sources */,
 				65F492772C1088FC00F4BCE2 /* UIKitTestApp.xcdatamodeld in Sources */,
 				65F492712C1088FC00F4BCE2 /* ViewController.swift in Sources */,

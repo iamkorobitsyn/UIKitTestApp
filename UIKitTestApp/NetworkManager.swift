@@ -17,9 +17,9 @@ class NetworkManager {
     static let schared = NetworkManager()
     
     func fetchData <Model: Decodable> 
-    (type: Model.Type, url: String, completion: @escaping(Result <Model, NetworkError>) -> Void) {
+    (type: Model.Type, url: EndPoints, completion: @escaping(Result <Model, NetworkError>) -> Void) {
         
-        guard let url = URL(string: url) else {
+        guard let url = url.url else {
             completion(.failure(.invalidURL))
             return
         }
