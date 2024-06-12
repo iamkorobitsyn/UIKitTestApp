@@ -17,9 +17,9 @@ class NetworkManager {
     static let schared = NetworkManager()
     
     func fetchData <Model: Decodable> 
-    (type: Model.Type, url: EndPoints, completion: @escaping(Result <Model, NetworkError>) -> Void) {
+    (type: Model.Type, endPoint: EndPoints, completion: @escaping(Result <Model, NetworkError>) -> Void) {
         
-        guard let url = url.url else {
+        guard let url = endPoint.url else {
             completion(.failure(.invalidURL))
             return
         }
@@ -41,5 +41,24 @@ class NetworkManager {
             }
             
         }.resume()
+    }
+    
+    func fetchImage(url: String, completion: @escaping(Result<Data, NetworkError>) -> Void) {
+        
+        guard let url = URL(string: url) else {
+            completion(.failure(.invalidURL))
+            return
+        }
+        
+        DispatchQueue.global().async {
+            guard let data = try? Data(contentsOf: url) else {
+                completion(.failure(.noData))
+                return
+            }
+            
+            DispatchQueue.main.async {
+                completion(.success(data))
+            }
+        }
     }
 }

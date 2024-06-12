@@ -9,120 +9,81 @@ import UIKit
 
 class ViewController: UIViewController {
     
-    private let tableView: UITableView = {
-        let table = UITableView()
-        table.backgroundColor = .clear
-        table.separatorStyle = .none
-        table.translatesAutoresizingMaskIntoConstraints = false
-        table.register(TableViewCell.self, forCellReuseIdentifier: "cell")
-        return table
-    }()
-    
-    private let getButton: UIButton = {
-        let button = UIButton()
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.backgroundColor = .red.withAlphaComponent(0.7)
-        button.layer.cornerRadius = 25
-        button.setTitle("Categories", for: .normal)
-        return button
-    }()
-    
-    private let resetButton: UIButton = {
-        let button = UIButton()
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.backgroundColor = .red.withAlphaComponent(0.7)
-        button.layer.cornerRadius = 25
-        button.setTitle("Products", for: .normal)
-        return button
+    private let collectionView = {
+        
+        let layout = UICollectionViewFlowLayout()
+        layout.minimumLineSpacing = 10
+        layout.sectionInset = UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20)
+        layout.scrollDirection = .vertical
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        collectionView.backgroundColor = .none
+        collectionView.register(CollectionViewCell.self, forCellWithReuseIdentifier: "cell")
+        return collectionView.disableAutoresizing
     }()
     
     var products: [Product] = []
-    
 
+    
     override func viewDidLoad() {
-        super.viewDidLoad() 
-        setViews()
-        setConstraints()
-        fetchContent(url: .products)
+        super.viewDidLoad()
+        setupUI()
+        fetchContent(endPoint: .products)
     }
     
-    //MARK: - SetViews
+    //MARK: - setupUI
     
-    private func setViews() {
+    private func setupUI() {
         view.backgroundColor = .systemGray5
-        tableView.delegate = self
-        tableView.dataSource = self
+        collectionView.delegate = self
+        collectionView.dataSource = self
+        view.addSubview(collectionView)
         
-        view.addSubview(tableView)
-        view.addSubview(getButton)
-        view.addSubview(resetButton)
+        NSLayoutConstraint.activate([
+            collectionView.topAnchor.constraint(equalTo: view.topAnchor, constant: 100),
+            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -100),
+            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor)
+            
+        ])
+        
     }
+    
     
     //MARK: - FetchContent
     
-    private func fetchContent(url: EndPoints) {
+    private func fetchContent(endPoint: EndPoints) {
 
-        NetworkManager.schared.fetchData(type: [Product].self, url: url) { result in
+        NetworkManager.schared.fetchData(type: [Product].self, endPoint: endPoint) { result in
             
             switch result {
                 
             case .success(let data):
                 self.products = data
-                self.tableView.reloadData()
+                self.collectionView.reloadData()
             case .failure(let error):
                 print(error)
             }
         }
     }
-    
-    @objc private func showProducts() {
-        
-    }
-    
-    @objc private func showCategories() {
-        
-    }
-    
-
-    //MARK: - SetConstraints
-    
-    private func setConstraints() {
-        NSLayoutConstraint.activate([
-            tableView.topAnchor.constraint(equalTo: view.topAnchor),
-            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -300),
-            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            
-            getButton.widthAnchor.constraint(equalToConstant: 100),
-            getButton.heightAnchor.constraint(equalToConstant: 50),
-            getButton.leadingAnchor.constraint(equalTo: view.leadingAnchor,
-                                               constant: 50),
-            getButton.bottomAnchor.constraint(equalTo: view.bottomAnchor,
-                                              constant: -150),
-            
-            resetButton.widthAnchor.constraint(equalToConstant: 100),
-            resetButton.heightAnchor.constraint(equalToConstant: 50),
-            resetButton.trailingAnchor.constraint(equalTo: view.trailingAnchor,
-                                                  constant: -50),
-            resetButton.bottomAnchor.constraint(equalTo: view.bottomAnchor,
-                                                constant: -150)
-        ])
-    }
 }
 
-    //MARK: - TableViewDataSourse&Delegate
-
-extension ViewController: UITableViewDataSource, UITableViewDelegate {
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         products.count
     }
     
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as? TableViewCell {
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as? CollectionViewCell {
+            
+            let product = products[indexPath.row]
+            cell.configure(with: product)
+           
             return cell
         }
-        return UITableViewCell()
-        
+        return UICollectionViewCell()
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        CGSize(width: view.bounds.width / 2 - 25, height: view.bounds.width / 1.5)
     }
 }
-
