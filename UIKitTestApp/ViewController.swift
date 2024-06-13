@@ -53,7 +53,7 @@ class ViewController: UIViewController {
     
     private func fetchContent(endPoint: EndPoints) {
 
-        NetworkManager.schared.fetchData(type: [Product].self, endPoint: endPoint) { result in
+        NetworkManager.shared.fetchData(type: [Product].self, endPoint: endPoint) { result in
             
             switch result {
                 
@@ -76,7 +76,7 @@ extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource, 
         if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as? CollectionViewCell {
             
             let product = products[indexPath.row]
-            cell.configure(with: product)
+            cell.configure(product)
            
             return cell
         }

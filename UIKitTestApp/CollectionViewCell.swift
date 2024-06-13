@@ -66,33 +66,32 @@ class CollectionViewCell: UICollectionViewCell {
         ])
     }
     
-    func configure(with: Product) {
+    func configure(_ product: Product) {
         imageList = []
-    
-        priceLabel.text = "\(with.price) $"
-        descriptionLabel.text = with.description
+        
+        priceLabel.text = "\(product.price) $"
+        descriptionLabel.text = product.description
         
         let group = DispatchGroup()
-                
-        with.images.forEach { urlString in
-                    group.enter()
-            NetworkManager.schared.fetchImage(url: urlString) { result in
-                        defer { group.leave() }
-                        switch result {
-                        case .success(let data):
-                            if let image = UIImage(data: data) {
-                                self.imageList.append(image)
-
-                            }
-                        case .failure(let error):
-                            print(error)
-                        }
+        
+        product.images.forEach { urlString in
+            group.enter()
+            NetworkManager.shared.fetchImage(url: urlString) { result in
+                defer {group.leave()}
+                switch result {
+                case .success(let data):
+                    if let image = UIImage(data: data) {
+                        self.imageList.append(image)
                     }
+                case .failure(let error):
+                    print(error)
                 }
-                
-                group.notify(queue: .main) {
-                    self.collectionView.reloadData()
-                }
+            }
+        }
+        
+        group.notify(queue: .main) {
+            self.collectionView.reloadData()
+        }
     }
     
     required init?(coder: NSCoder) {

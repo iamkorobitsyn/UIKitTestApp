@@ -14,7 +14,7 @@ enum NetworkError: Error {
 }
 
 class NetworkManager {
-    static let schared = NetworkManager()
+    static let shared = NetworkManager()
     
     func fetchData <Model: Decodable> 
     (type: Model.Type, endPoint: EndPoints, completion: @escaping(Result <Model, NetworkError>) -> Void) {
