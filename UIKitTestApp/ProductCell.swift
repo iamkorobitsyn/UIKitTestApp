@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-class CollectionViewCell: UICollectionViewCell {
+class ProductCell: UICollectionViewCell {
     
     let collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -17,7 +17,7 @@ class CollectionViewCell: UICollectionViewCell {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.isPagingEnabled = true
         collectionView.backgroundColor = .green
-        collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "cell")
+        collectionView.register(ImageCell.self, forCellWithReuseIdentifier: "imageSetCell")
         return collectionView.disableAutoresizing
     }()
     
@@ -39,6 +39,8 @@ class CollectionViewCell: UICollectionViewCell {
         super.init(frame: frame)
         setupUI()
     }
+    
+    //MARK: - Setup UI
     
     private func setupUI() {
         contentView.backgroundColor = .yellow
@@ -62,9 +64,12 @@ class CollectionViewCell: UICollectionViewCell {
             descriptionLabel.widthAnchor.constraint(equalToConstant: bounds.width - 20),
             descriptionLabel.topAnchor.constraint(equalTo: priceLabel.bottomAnchor, constant: 10),
             descriptionLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 15)
-            
         ])
+        
+        
     }
+    
+    //MARK: Configure
     
     func configure(_ product: Product) {
         imageList = []
@@ -77,7 +82,7 @@ class CollectionViewCell: UICollectionViewCell {
         product.images.forEach { urlString in
             group.enter()
             NetworkManager.shared.fetchImage(url: urlString) { result in
-                defer {group.leave()}
+                group.leave()
                 switch result {
                 case .success(let data):
                     if let image = UIImage(data: data) {
@@ -99,28 +104,21 @@ class CollectionViewCell: UICollectionViewCell {
     }
 }
 
-extension CollectionViewCell: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
+//MARK: - UICollectionView Delegate DataSource FlowLayout
+
+extension ProductCell: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         imageList.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath)
+        if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "imageSetCell", for: indexPath) as? ImageCell {
+            cell.configure(image: imageList[indexPath.row])
+            return cell
+        }
         
-        let imageView = UIImageView(image: imageList[indexPath.row])
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.contentMode = .scaleAspectFill
-        cell.contentView.addSubview(imageView)
-        
-        NSLayoutConstraint.activate([
-            imageView.topAnchor.constraint(equalTo: cell.topAnchor),
-            imageView.trailingAnchor.constraint(equalTo: cell.trailingAnchor),
-            imageView.bottomAnchor.constraint(equalTo: cell.bottomAnchor),
-            imageView.leadingAnchor.constraint(equalTo: cell.leadingAnchor)
-        ])
-        
-        return cell
+        return UICollectionViewCell()
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {

@@ -14,9 +14,12 @@ enum NetworkError: Error {
 }
 
 class NetworkManager {
+    
     static let shared = NetworkManager()
     
-    func fetchData <Model: Decodable> 
+    //MARK: - FetchData
+    
+    func fetchData <Model: Decodable>
     (type: Model.Type, endPoint: EndPoints, completion: @escaping(Result <Model, NetworkError>) -> Void) {
         
         guard let url = endPoint.url else {
@@ -43,6 +46,8 @@ class NetworkManager {
         }.resume()
     }
     
+    //MARK: - FetchImage
+    
     func fetchImage(url: String, completion: @escaping(Result<Data, NetworkError>) -> Void) {
         
         guard let url = URL(string: url) else {
@@ -50,15 +55,26 @@ class NetworkManager {
             return
         }
         
-        DispatchQueue.global().async {
-            guard let data = try? Data(contentsOf: url) else {
+        //MARK: CacheSearch
+        if let cacheData = StorageManager.shared.getCahedImage(url: url) {
+            completion(.success(cacheData))
+            return
+        }
+        
+        URLSession.shared.dataTask(with: url) { data, responce, error in
+            
+            guard let data = data, let responce = responce else {
                 completion(.failure(.noData))
                 return
             }
             
+            //MARK: - GetCache
+            StorageManager.shared.setCashedImage(data: data, responce: responce)
+            
             DispatchQueue.main.async {
                 completion(.success(data))
             }
-        }
+            
+        }.resume()
     }
 }

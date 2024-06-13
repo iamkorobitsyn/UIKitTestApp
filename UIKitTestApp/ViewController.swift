@@ -10,14 +10,13 @@ import UIKit
 class ViewController: UIViewController {
     
     private let collectionView = {
-        
         let layout = UICollectionViewFlowLayout()
         layout.minimumLineSpacing = 10
         layout.sectionInset = UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20)
         layout.scrollDirection = .vertical
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.backgroundColor = .none
-        collectionView.register(CollectionViewCell.self, forCellWithReuseIdentifier: "cell")
+        collectionView.register(ProductCell.self, forCellWithReuseIdentifier: "productCell")
         return collectionView.disableAutoresizing
     }()
     
@@ -30,33 +29,32 @@ class ViewController: UIViewController {
         fetchContent(endPoint: .products)
     }
     
-    //MARK: - setupUI
+    //MARK: - Setup UI
     
     private func setupUI() {
-        view.backgroundColor = .systemGray5
+        
+        view.addSubview(collectionView)
         collectionView.delegate = self
         collectionView.dataSource = self
-        view.addSubview(collectionView)
-        
+
         NSLayoutConstraint.activate([
             collectionView.topAnchor.constraint(equalTo: view.topAnchor, constant: 100),
             collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -100),
             collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor)
-            
         ])
         
+        view.backgroundColor = .systemGray5
     }
     
     
-    //MARK: - FetchContent
+    //MARK: - Fetch content
     
     private func fetchContent(endPoint: EndPoints) {
 
         NetworkManager.shared.fetchData(type: [Product].self, endPoint: endPoint) { result in
             
             switch result {
-                
             case .success(let data):
                 self.products = data
                 self.collectionView.reloadData()
@@ -67,17 +65,18 @@ class ViewController: UIViewController {
     }
 }
 
+//MARK: - UICollectionView Delegate DataSource FlowLayout
+
 extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         products.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as? CollectionViewCell {
+        if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "productCell", for: indexPath) as? ProductCell {
             
             let product = products[indexPath.row]
             cell.configure(product)
-           
             return cell
         }
         return UICollectionViewCell()
