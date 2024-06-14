@@ -7,8 +7,12 @@
 
 import UIKit
 
-class ViewController: UIViewController {
-    
+protocol MainVCProtocol: AnyObject {
+    func updateCollectionView(products: [Product])
+}
+
+class MainVC: UIViewController {
+
     private let collectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.minimumLineSpacing = 10
@@ -21,13 +25,17 @@ class ViewController: UIViewController {
     }()
     
     var products: [Product] = []
-
     
+    //MARK: - ViewDidLoad
+
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
-        fetchContent(endPoint: .products)
+        presenter.viewDidLoad()
     }
+    
+    var presenter: MainPresenterProtocol!
+
     
     //MARK: - Setup UI
     
@@ -46,28 +54,11 @@ class ViewController: UIViewController {
         
         view.backgroundColor = .systemGray5
     }
-    
-    
-    //MARK: - Fetch content
-    
-    private func fetchContent(endPoint: EndPoints) {
-
-        NetworkManager.shared.fetchData(type: [Product].self, endPoint: endPoint) { result in
-            
-            switch result {
-            case .success(let data):
-                self.products = data
-                self.collectionView.reloadData()
-            case .failure(let error):
-                print(error)
-            }
-        }
-    }
 }
 
 //MARK: - UICollectionView Delegate DataSource FlowLayout
 
-extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+extension MainVC: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         products.count
     }
@@ -84,5 +75,14 @@ extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource, 
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         CGSize(width: view.bounds.width / 2 - 25, height: view.bounds.width / 1.5)
+    }
+}
+
+//MARK: - MainVCProtocol
+
+extension MainVC: MainVCProtocol {
+    func updateCollectionView(products: [Product]) {
+        self.products = products
+        self.collectionView.reloadData()
     }
 }

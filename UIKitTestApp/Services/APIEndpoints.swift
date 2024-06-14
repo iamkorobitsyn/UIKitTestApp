@@ -48,7 +48,7 @@ import Foundation
 
 
 struct API {
-    static let baseURL = "https://api.escuelajs.co/api/v1/"
+    static let baseURL = "https://fakestoreapi.com/"
 }
 
 enum EndPoints {
