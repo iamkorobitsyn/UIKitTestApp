@@ -17,6 +17,32 @@ class NetworkManager {
     
     static let shared = NetworkManager()
     
+    func fetchData<T: Decodable>(
+        request: URLRequest,
+        type: T.Type,
+        completion: @escaping(Result<T, NetworkError>) -> Void) {
+            
+            URLSession.shared.dataTask(with: request) { data, respounse, error in
+                
+                guard let data = data else {
+                    completion(.failure(.noData))
+                    return
+                }
+                
+                do {
+                    let type = try JSONDecoder().decode(T.self, from: data)
+                    DispatchQueue.main.async {
+                        completion(.success(type))
+                    }
+                } catch {
+                    completion(.failure(.decodingError))
+                }
+                
+            }.resume()
+        }
+    
+    // Почитать про параметры запросов(Headers, Body, Query, HttpMhetods)
+    
     //MARK: - FetchData
     
     func fetchData <Model: Decodable>
