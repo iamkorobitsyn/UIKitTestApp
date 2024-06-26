@@ -18,7 +18,7 @@ class MainPresenter: MainPresenterProtocol {
     var interactor: MainInteractorProtocol!
     
     func viewDidLoad() {
-        interactor.fetchData(endPoint: .products)
+        interactor.fetchData()
     }
     
     func didFetchData(products: [Product]) {

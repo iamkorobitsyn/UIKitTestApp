@@ -8,21 +8,26 @@
 import Foundation
 
 protocol MainInteractorProtocol: AnyObject {
-    func fetchData(endPoint: EndPoints)
+    func fetchData()
 }
 
 class MainInteractor: MainInteractorProtocol {
     
     weak var presenter: MainPresenter!
     
-    func fetchData(endPoint: EndPoints) {
-        NetworkManager.shared.fetchData(type: [Product].self, endPoint: endPoint) { result in
-            
-            switch result {
-            case .success(let data):
-                self.presenter.didFetchData(products: data)
-            case .failure(let error):
-                print(error)
+    func fetchData() {
+        
+        Task {
+            do {
+                let configuration = URLConfigurations.products.configuration
+                
+                let request = Request(method: .get, URLConfiguration: configuration)
+                let data = try await NetworkManager.shared.fetchDataTest(request: request, responseType: [Product].self)
+                await MainActor.run {
+                    self.presenter.didFetchData(products: data)
+                }
+            } catch {
+                print("Task Error")
             }
         }
     }
