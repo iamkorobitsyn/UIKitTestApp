@@ -21,8 +21,8 @@ class MainInteractor: MainInteractorProtocol {
             do {
                 let configuration = URLConfigurations.products.configuration
                 
-                let request = Request(method: .get, URLConfiguration: configuration)
-                let data = try await NetworkManager.shared.fetchDataTest(request: request, responseType: [Product].self)
+                let request = BaseRequest(method: .get, URLConfiguration: configuration)
+                let data = try await NetworkManager.shared.fetchData(request: request, responseType: [Product].self)
                 await MainActor.run {
                     self.presenter.didFetchData(products: data)
                 }

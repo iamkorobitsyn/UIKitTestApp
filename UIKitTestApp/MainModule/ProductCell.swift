@@ -72,19 +72,13 @@ class ProductCell: UICollectionViewCell {
         priceLabel.text = "\(product.price) $"
         titleLabel.text = product.title
         
-
-            NetworkManager.shared.fetchImage(url: product.image) { result in
-
-                switch result {
-                case .success(let data):
-                    if let image = UIImage(data: data) {
-                        self.imageView.image = image
-                    }
-                case .failure(let error):
-                    print(error)
-                }
+        Task {
+            let data = try await NetworkManager.shared.fetchImage(url: product.image)
+            let image = UIImage(data: data)
+            await MainActor.run {
+                self.imageView.image = image
             }
-
+        }
     }
     
     required init?(coder: NSCoder) {

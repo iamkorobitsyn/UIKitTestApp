@@ -15,17 +15,36 @@ class NetworkManager {
     
     static let shared = NetworkManager()
     
-    func fetchDataTest<T: Decodable>(request: Request, responseType: T.Type) async throws -> T {
+    func fetchData<T: Decodable>(request: BaseRequest, responseType: T.Type) async throws -> T {
         
         let request = try request.asURLRequest()
-
-        let (data, respounce) = try await URLSession.shared.data(for: request)
+        let (data, responce) = try await URLSession.shared.data(for: request)
         
         do {
             return try JSONDecoder().decode(T.self, from: data)
         } catch {
             throw NetworkError.noData
         }
+    }
+    
+    func fetchImage(url: String) async throws -> Data {
+        
+        guard let url = URL(string: url) else {
+            throw NetworkError.invalidURL
+        }
+        
+        //MARK: CacheSearch
+        if let cacheData = StorageManager.shared.getCahedImage(url: url) {
+            return cacheData
+        }
+        
+        let (data, response) = try await URLSession.shared.data(from: url)
+        
+        // MARK: - SetCache
+        StorageManager.shared.setCashedImage(data: data, responce: response)
+        
+        return data
+
     }
     
 
@@ -63,33 +82,33 @@ class NetworkManager {
     
     //MARK: - FetchImage
     
-    func fetchImage(url: String, completion: @escaping(Result<Data, NetworkError>) -> Void) {
-        
-        guard let url = URL(string: url) else {
-            completion(.failure(.invalidURL))
-            return
-        }
-        
-        //MARK: CacheSearch
-        if let cacheData = StorageManager.shared.getCahedImage(url: url) {
-            completion(.success(cacheData))
-            return
-        }
-        
-        URLSession.shared.dataTask(with: url) { data, responce, error in
-            
-            guard let data = data, let responce = responce else {
-                completion(.failure(.noData))
-                return
-            }
-            
-            //MARK: - GetCache
-            StorageManager.shared.setCashedImage(data: data, responce: responce)
-            
-            DispatchQueue.main.async {
-                completion(.success(data))
-            }
-            
-        }.resume()
-    }
+//    func fetchImage(url: String, completion: @escaping(Result<Data, NetworkError>) -> Void) {
+//        
+//        guard let url = URL(string: url) else {
+//            completion(.failure(.invalidURL))
+//            return
+//        }
+//        
+//        //MARK: CacheSearch
+//        if let cacheData = StorageManager.shared.getCahedImage(url: url) {
+//            completion(.success(cacheData))
+//            return
+//        }
+//        
+//        URLSession.shared.dataTask(with: url) { data, responce, error in
+//            
+//            guard let data = data, let responce = responce else {
+//                completion(.failure(.noData))
+//                return
+//            }
+//            
+//            //MARK: - GetCache
+//            StorageManager.shared.setCashedImage(data: data, responce: responce)
+//            
+//            DispatchQueue.main.async {
+//                completion(.success(data))
+//            }
+//            
+//        }.resume()
+//    }
 }

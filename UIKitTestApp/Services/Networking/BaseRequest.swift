@@ -7,7 +7,7 @@
 
 import Foundation
 
-final class Request {
+final class BaseRequest {
     
     //MARK: - HTTPMethod
     

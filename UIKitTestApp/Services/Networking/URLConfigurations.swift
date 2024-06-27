@@ -40,7 +40,6 @@ enum URLConfigurations {
                                     path: "/categories/\(id)")
         }
     }
-    
 }
 //
 //struct API {
