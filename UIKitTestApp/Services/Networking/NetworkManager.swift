@@ -17,8 +17,11 @@ class NetworkManager {
     
     func fetchData<T: Decodable>(request: BaseRequest, responseType: T.Type) async throws -> T {
         
+        
         let request = try request.asURLRequest()
         let (data, responce) = try await URLSession.shared.data(for: request)
+        
+        
         
         do {
             return try JSONDecoder().decode(T.self, from: data)
